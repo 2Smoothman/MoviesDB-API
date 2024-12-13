@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/movies") // Base URL for all endpoints in this controller
+@RequestMapping("/api/movies") //Base URL for all endpoints in this controller
 public class MovieController {
 
     @Autowired
@@ -26,15 +26,14 @@ public class MovieController {
     @Autowired
     private ActorService actorService;
 
-    // Endpoint to get all movies with pagination
+    //Endpoint to get all movies with pagination
     @PostMapping
     public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie) {
         Movie createdMovie = movieService.createMovie(movie);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdMovie); // Specifying the http status to fit the
-                                                                             // task requirements
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdMovie); //Specifying the http status to fit the task requirements
     }
 
-    // Endpoint to get all movies, or all movies by genre, release year or actor
+    //Endpoint to get all movies, or all movies by genre, release year or actor
     @GetMapping
     public ResponseEntity<?> getAllMoviesOrByGenreByReleaseYearByActor(
             @RequestParam(required = false) Long genre,
@@ -43,7 +42,7 @@ public class MovieController {
             @PageableDefault(sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
-        // Validate page and size parameters
+        //Validate page and size parameters
         if (page < 0) {
             throw new IllegalStateException("Page number must be greater than or equal to 0");
         }
@@ -51,9 +50,9 @@ public class MovieController {
             throw new IllegalStateException("Page size must be less than or equal to 100");
         }
 
-        Page<Movie> moviePage; // Create an empty page before fetching anything to keep the code more readable
+        Page<Movie> moviePage; //Create an empty page before fetching anything to keep the code more readable
 
-        // Fetches the movies depending on what search parameter has been given
+        //Fetches the movies depending on what search parameter has been given
         if (genre != null) {
             moviePage = movieService.getMoviesByGenreId(genre, pageable);
         } else if (year != null) {
@@ -64,7 +63,7 @@ public class MovieController {
             moviePage = movieService.getAllMovies(pageable);
         }
 
-        // Construct the response manually so it looks better
+        //Construct the response manually so it looks better
         Map<String, Object> response = new HashMap<>();
         response.put("content", moviePage.getContent());
         response.put("totalElements", moviePage.getTotalElements());
@@ -74,33 +73,33 @@ public class MovieController {
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint to get a movie by ID
+    //Endpoint to get a movie by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getMovieById(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
-    // Endpoint to update an existing movie
+    //Endpoint to update an existing movie
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateMovie(@PathVariable Long id,
-            @RequestBody Map<String, Object> updatedMovie) {
+                                         @RequestBody Map<String, Object> updatedMovie) {
         return ResponseEntity.ok(movieService.updateMovie(id, updatedMovie));
     }
 
-    // Endpoint to delete a movie by ID
+    //Endpoint to delete a movie by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMovieById(@PathVariable Long id,
-            @RequestParam(defaultValue = "false") boolean force) {
+                                             @RequestParam(defaultValue = "false") boolean force) {
         movieService.deleteMovie(id, force);
         return ResponseEntity.noContent().build();
     }
 
-    // Endpoint to search for a movie by title
+    //Endpoint to search for a movie by title
     @GetMapping("/search")
     public ResponseEntity<?> getByTitle(@RequestParam String title,
-            @PageableDefault(sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size) {
+                                        @PageableDefault(sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
+                                        @RequestParam(required = false, defaultValue = "0") int page,
+                                        @RequestParam(required = false, defaultValue = "10") int size) {
         if (page < 0) {
             throw new IllegalStateException("Page number must be greater than or equal to 0");
         }
@@ -118,12 +117,12 @@ public class MovieController {
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint to get all actors in a specific movie
+    //Endpoint to get all actors in a specific movie
     @GetMapping("/{id}/actors")
     public ResponseEntity<?> getAllActorsInMovie(@PathVariable Long id,
-            @PageableDefault(sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size) {
+                                                 @PageableDefault(sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
+                                                 @RequestParam(required = false, defaultValue = "0") int page,
+                                                 @RequestParam(required = false, defaultValue = "10") int size) {
         if (page < 0) {
             throw new IllegalStateException("Page number must be greater than or equal to 0");
         }

@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActorRepository extends JpaRepository<Actor, Long> {
-    // Helper methods to add features beyond the given JpaRepository ones
+    //Helper methods to add features beyond the given JpaRepository ones
     Page<Actor> findByNameContainingIgnoreCase(String name, Pageable pageable);
-
     Page<Actor> findByMoviesId(Long movieId, Pageable pageable);
 }
