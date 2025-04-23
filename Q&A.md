@@ -403,4 +403,3 @@ A REST API URL is typically divided into three main components:
      public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
          return movieService.findById(id)
              .map(movie -> new ResponseEntity<>(movie, HttpStatus.OK))
-
